@@ -5,6 +5,7 @@ require_once __DIR__ . '/../modelo/Notificacion.php';
 require_once __DIR__ . '/../modelo/Cliente.php';
 require_once __DIR__ . '/../modelo/Plan.php';
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../servicios/SlaService.php';
 
 class DashboardController
 {
@@ -23,6 +24,10 @@ class DashboardController
         $porEstadoPlan = $planes->conteoPorEstado();
         $totalEmpresas = count($empresas);
         $empresasSinPlan = count(array_filter($empresas, fn ($e) => (int) $e['total_planes'] === 0));
+        $metricasSla = null;
+        if (($_SESSION['usuario_rol'] ?? '') === 'admin') {
+            $metricasSla = (new SlaService())->calcular($model->datosParaSla());
+        }
         require __DIR__ . '/../views/dashboard.php';
     }
 }

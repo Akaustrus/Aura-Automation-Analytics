@@ -105,4 +105,7 @@ $misPlanes = $misPlanes ?? [];
     </div>
 </div>
 
-<?php require __DIR__ . '/_portal_footer.php'; ?>
+<?php
+if (!empty($_SESSION['cliente_id'])) { echo "\n</main>"; }
+require __DIR__ . '/_portal_footer.php';
+?>

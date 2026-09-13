@@ -23,7 +23,14 @@ $porTipo = $db->query("SELECT tipo, COUNT(*) n, COALESCE(SUM(total),0) total FRO
                        GROUP BY tipo")->fetchAll();
 ?>
 
-<h2 class="page-title mb-4"><i class="fa-solid fa-table-columns me-2"></i>Panel de facturación</h2>
+<section class="page-heading module-page-heading mb-4">
+    <div>
+        <span class="page-eyebrow">Ventas y comprobantes</span>
+        <h1 class="page-title mb-1">Panel de facturación</h1>
+        <p class="page-subtitle mb-0">Sigue la facturación, el IGV y la actividad comercial del periodo.</p>
+    </div>
+    <a href="index.php?vista=comprobantes" class="btn btn-primary"><i class="fa-solid fa-file-circle-plus me-1"></i>Nuevo comprobante</a>
+</section>
 
 <div class="row g-3 mb-4">
     <div class="col-md-3">

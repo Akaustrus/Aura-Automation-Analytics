@@ -1,6 +1,6 @@
 ﻿<?php
 /**
- * Exportador de reportes â€” PDF, XLSX, Word (.doc), CSV.
+ * Exportador de reportes — PDF, XLSX, Word (.doc), CSV.
  *
  * Uso:  Exportar::generar($titulo, $cabeceras, $filas, $nombreBase, $subtotal);
  *
@@ -27,13 +27,13 @@ class Exportar
             case 'csv':  self::csv($titulo, $cabeceras, $filas, $nombreBase, $subtotal); break;
             default:
                 http_response_code(400);
-                echo 'Formato no vÃ¡lido.';
+                echo 'Formato no válido.';
                 exit;
         }
     }
 
     /* ================================================================= */
-    /*  EXCEL XLSX  (generaciÃ³n real con ZipArchive)                      */
+    /*  EXCEL XLSX  (generación real con ZipArchive)                      */
     /* ================================================================= */
     private static function xlsx(string $titulo, array $cab, array $filas, string $name, array $sub): void
     {
@@ -65,7 +65,7 @@ class Exportar
         $zip->addFromString('docProps/core.xml', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <dc:title>' . self::escXml($titulo) . '</dc:title>
-  <dc:subject>Aura Automation &amp; Analytics - MÃ³dulo Contable</dc:subject>
+  <dc:subject>Aura Automation &amp; Analytics - Sistema de Planilla</dc:subject>
 </cp:coreProperties>');
 
         // --- docProps/app.xml ---
@@ -108,12 +108,12 @@ class Exportar
   <cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>
 </styleSheet>');
 
-        // --- Hoja de cÃ¡lculo ---
+        // --- Hoja de cálculo ---
         $sheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
   <sheetData>';
 
-        // Fila 1: tÃ­tulo (opcional, fusionar concepto)
+        // Fila 1: título (opcional, fusionar concepto)
         $sheet .= '<row r="1"><c r="A1" t="inlineStr"><is><t>' . self::escXml($titulo) . '</t></is></c></row>';
 
         // Fila 2: encabezados (estilo 1 = bold+teal)
@@ -174,7 +174,7 @@ class Exportar
         $pdf->SetAutoPageBreak(true, 15);
         $pdf->AddPage();
         $pdf->SetTitle($titulo);
-        $pdf->SetAuthor('Aura Automation & Analytics - MÃ³dulo Contable');
+        $pdf->SetAuthor('Aura Automation & Analytics - Sistema de Planilla');
 
         // Encabezado del documento
         $pdf->SetFont('Arial', 'B', 16);
@@ -188,7 +188,7 @@ class Exportar
         $numCols = count($cab);
         if ($numCols === 0) return;
 
-        // Ancho disponible (A4 210mm menos mÃ¡rgenes 10+10)
+        // Ancho disponible (A4 210mm menos márgenes 10+10)
         $wPdf = $pdf->GetPageWidth() - 20;
         $wPdf = (int) $wPdf;
         $anchoCol = floor($wPdf / $numCols);
@@ -208,7 +208,7 @@ class Exportar
         $pdf->SetTextColor(19, 78, 74);  // ink
         $fill = false;
         foreach ($filas as $fila) {
-            // Salto de pÃ¡gina si es necesario
+            // Salto de página si es necesario
             if ($pdf->GetY() + $alturaFila > $pdf->GetPageHeight() - 15) {
                 $pdf->AddPage();
                 // Re-dibujar encabezados
@@ -243,18 +243,18 @@ class Exportar
             }
         }
 
-        // Pie de pÃ¡gina
+        // Pie de página
         $pdf->Ln(6);
         $pdf->SetFont('Arial', 'I', 8);
         $pdf->SetTextColor(100, 116, 139);
-        $pdf->Cell(0, 5, 'Aura Automation & Analytics â€” MÃ³dulo Contable  |  PÃ¡gina ' . $pdf->PageNo(), 0, 1, 'C');
+        $pdf->Cell(0, 5, 'Aura Automation & Analytics — Sistema de Planilla  |  Página ' . $pdf->PageNo(), 0, 1, 'C');
 
         $pdf->Output('D', $name . '.pdf');
         exit;
     }
 
     /* ================================================================= */
-    /*  WORD (.doc) â€” HTML compatible con Microsoft Word                   */
+    /*  WORD (.doc) — HTML compatible con Microsoft Word                   */
     /* ================================================================= */
     private static function doc(string $titulo, array $cab, array $filas, string $name, array $sub): void
     {
@@ -300,7 +300,7 @@ tr:nth-child(even) td { background: #f0fdfa; }
         }
 
         $html .= '</table>
-<div class="footer">Aura Automation & Analytics &mdash; MÃ³dulo Contable</div>
+<div class="footer">Aura Automation & Analytics &mdash; Sistema de Planilla</div>
 </body></html>';
 
         header('Content-Type: application/msword');
@@ -316,12 +316,12 @@ tr:nth-child(even) td { background: #f0fdfa; }
     {
         $output = fopen('php://temp', 'r+');
 
-        // BOM UTF-8 para que Excel detecte la codificaciÃ³n
+        // BOM UTF-8 para que Excel detecte la codificación
         fwrite($output, "\xEF\xBB\xBF");
 
         // Comentario inicial
         fputcsv($output, [$titulo], ';');
-        fputcsv($output, ['Generado: ' . date('d/m/Y H:i') . ' â€” Aura Automation & Analytics'], ';');
+        fputcsv($output, ['Generado: ' . date('d/m/Y H:i') . ' — Aura Automation & Analytics'], ';');
         fputcsv($output, [], ';');
 
         // Cabeceras

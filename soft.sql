@@ -324,12 +324,12 @@ INSERT INTO historial (ticket_id, usuario_id, estado_anterior, estado_nuevo, com
 (3, 5, 'en_curso', 'culminado', 'Reporte desarrollado y en pruebas.', '2026-09-03 11:00:00'),
 (4, 1, 'nuevo', 'en_curso', 'Asignado para coordinar la migración', '2026-09-02 12:00:00'),
 (4, 5, 'en_curso', 'resuelto', 'Actualización completada en producción.', '2026-09-03 09:00:00'),
-(6, 1, 'nuevo', 'en_curso', 'Asignado a Elena y Juanito para revisar rendimiento del inventario', '2026-09-03 09:15:00'),
-(6, 5, 'en_curso', 'en_curso', 'Optimizando consultas del módulo de inventario', '2026-09-03 15:00:00'),
-(8, 1, 'nuevo', 'en_curso', 'Coordinando asesoría con el hotel', '2026-09-02 14:30:00'),
-(8, 5, 'en_curso', 'resuelto', 'Permisos configurados según requerimiento', '2026-09-03 16:00:00'),
-(9, 1, 'nuevo', 'en_curso', 'Asignado para cotizar el desarrollo del reporte', '2026-09-01 11:00:00'),
-(9, 5, 'en_curso', 'pausado', 'Pendiente de aprobación de alcance por el cliente', '2026-09-02 12:00:00');
+(5, 1, 'nuevo', 'en_curso', 'Asignado a Elena y Juanito para revisar rendimiento del inventario', '2026-09-03 09:15:00'),
+(5, 5, 'en_curso', 'en_curso', 'Optimizando consultas del módulo de inventario', '2026-09-03 15:00:00'),
+(7, 1, 'nuevo', 'en_curso', 'Coordinando asesoría con el hotel', '2026-09-02 14:30:00'),
+(7, 5, 'en_curso', 'resuelto', 'Permisos configurados según requerimiento', '2026-09-03 16:00:00'),
+(8, 1, 'nuevo', 'en_curso', 'Asignado para cotizar el desarrollo del reporte', '2026-09-01 11:00:00'),
+(8, 5, 'en_curso', 'pausado', 'Pendiente de aprobación de alcance por el cliente', '2026-09-02 12:00:00');
 
 -- -----------------------------------------------------
 -- Datos semilla - Notificaciones (avisos de "culminado")

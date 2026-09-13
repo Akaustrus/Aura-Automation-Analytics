@@ -65,17 +65,17 @@ usa, con su suscripción (estado, licencias, precio, vigencia) y sus incidencias
    > ```
 
 2. Ajusta credenciales en `config/database.php` o variables de entorno
-   `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`, `DB_CHARSET` (por defecto `root` / `1234`).
-   > La BD activa por defecto es **`softtech`**; si instalaste desde cero con `soft.sql`
-   > usa `DB_NAME=aura` (o renombra la base).
+   `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASS`, `DB_CHARSET`.
+   Los valores locales de XAMPP son `localhost:3307`, usuario `root`, sin contraseña,
+   y base **`aura`**. Cada módulo admite además variables con su prefijo
+   (`CONTABILIDAD_DB_*`, `FACTURACION_DB_*`, `PLANILLA_DB_*`, `ERP_DB_*`, `MEDIO_DB_*`).
 
-3. Levanta el servidor desde `public/`:
+3. Levanta el servidor integrado desde la raíz:
    ```
-   cd public
-   php -S localhost:8000
+   php -S localhost:8000 -t .
    ```
 
-4. Abre `http://localhost:8000/index.php?ruta=login`
+4. Abre `http://localhost:8000/public/index.php?ruta=login`
 
 ## Estructura (MVC)
 
@@ -85,6 +85,8 @@ usa, con su suscripción (estado, licencias, precio, vigencia) y sus incidencias
 - `views/` — plantillas (login, dashboard, tickets/, portal/, notificaciones/, **planes, empresas**).
 - `includes/` — autenticación y helpers (incl. cálculo de urgencia/prioridad).
 - `public/` — punto de entrada (`index.php`), CSS y JS.
+- `servicios/` — reglas de negocio desacopladas (incluye cálculo de SLA).
+- `docs/ARQUITECTURA.md` — mapa de capas, contrato de módulos y ejecución integrada.
 - `migracion_planes.sql` — migración para BD existente (agrega sistemas/suscripciones).
 
 ## Funcionalidades
@@ -109,7 +111,7 @@ usa, con su suscripción (estado, licencias, precio, vigencia) y sus incidencias
 - **Notificaciones internas** al culminar el trabajo del encargado.
 - **Portal del cliente** (empresa): entra con RUC + clave, ve sus incidencias y
   califica su **satisfacción**.
-- Panel con estadísticas (incluye promedio de satisfacción).
+- Panel de administración con estadísticas, promedio de satisfacción y KPIs de SLA por prioridad.
 
 ## Usuarios internos de prueba
 

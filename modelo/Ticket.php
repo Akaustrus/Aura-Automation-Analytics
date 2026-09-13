@@ -221,6 +221,17 @@ class Ticket
         return $resultado;
     }
 
+    /** Datos mínimos para evaluar el SLA; la regla se aplica en SlaService. */
+    public function datosParaSla(): array
+    {
+        return $this->db->query(
+            "SELECT id, prioridad, estado, fecha_creacion,
+                    COALESCE(fecha_resolucion, fecha_culminacion) AS fecha_fin
+             FROM tickets
+             ORDER BY fecha_creacion DESC"
+        )->fetchAll();
+    }
+
     public function total(string $campo): int
     {
         $stmt = $this->db->query("SELECT COUNT(*) AS t FROM tickets WHERE estado IN ('resuelto','cerrado')");

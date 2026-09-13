@@ -103,6 +103,19 @@ function etiquetaPlanEstado(string $estado): string
     };
 }
 
+function urlSistemaPortal(string $slug): ?string
+{
+    $rutas = [
+        'contabilidad' => '../sistemacontable/index.php',
+        'facturacion' => '../sistemafacturacion/index.php',
+        'planilla' => '../sistemaplanilla/index.php',
+        'erp-basico' => '../sistemaerp/index.php',
+        'erp-mediana' => '../sistemaermedio/index.php',
+    ];
+
+    return $rutas[$slug] ?? null;
+}
+
 function etiquetaCategoria(string $categoria): string
 {
     return match ($categoria) {

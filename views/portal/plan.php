@@ -3,6 +3,8 @@ $portalTitulo = $suscripcion['plan_nombre'] ?? 'Detalle del sistema';
 require __DIR__ . '/_portal_header.php';
 $suscripcion = $suscripcion ?? [];
 $tickets = $tickets ?? [];
+$accesoSistema = urlSistemaPortal($suscripcion['plan_slug'] ?? '');
+$puedeIngresar = ($suscripcion['estado'] ?? '') === 'activo' && $accesoSistema !== null;
 ?>
 
 <div class="container py-4">
@@ -10,9 +12,16 @@ $tickets = $tickets ?? [];
         <h2 class="page-title mb-0">
             <i class="fa-solid <?= limpiar($suscripcion['icono']) ?> me-2"></i><?= limpiar($suscripcion['plan_nombre']) ?>
         </h2>
-        <a href="index.php?ruta=portal-planes" class="btn btn-sm btn-outline-secondary">
-            <i class="fa-solid fa-arrow-left me-1"></i>Mis sistemas
-        </a>
+        <div class="d-flex flex-wrap gap-2">
+            <?php if ($puedeIngresar): ?>
+                <a href="<?= limpiar($accesoSistema) ?>" class="btn btn-sm btn-primary">
+                    <i class="fa-solid fa-arrow-up-right-from-square me-1"></i>Abrir sistema
+                </a>
+            <?php endif; ?>
+            <a href="index.php?ruta=portal-planes" class="btn btn-sm btn-outline-secondary">
+                <i class="fa-solid fa-arrow-left me-1"></i>Mis sistemas
+            </a>
+        </div>
     </div>
 
     <div class="card mb-3">

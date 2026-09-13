@@ -4,8 +4,12 @@ $conteo = $conteo ?? [];
 $porEstado = $porEstado ?? [];
 ?>
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="page-title mb-0"><i class="fa-solid fa-layer-group me-2"></i>Sistemas y soluciones</h2>
+<div class="page-heading admin-hero admin-hero--compact mb-4">
+    <div>
+        <span class="page-eyebrow">Ecosistema de productos</span>
+        <h1 class="page-title mb-1">Sistemas y soluciones</h1>
+        <p class="page-subtitle mb-0">Gestiona el portafolio contratado por cada empresa.</p>
+    </div>
     <a href="index.php?ruta=empresa-nueva" class="btn btn-primary">
         <i class="fa-solid fa-building-circle-plus me-1"></i>Nueva empresa
     </a>
@@ -54,7 +58,7 @@ $porEstado = $porEstado ?? [];
         $activas = (int) ($conteo[$p['id']]['activas'] ?? 0);
     ?>
         <div class="col-md-6 col-xl-4">
-            <div class="card h-100">
+            <div class="card h-100 solution-card">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-start gap-3">
                         <span class="app-logo"><i class="fa-solid <?= limpiar($p['icono']) ?>"></i></span>

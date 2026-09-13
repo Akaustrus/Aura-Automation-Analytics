@@ -27,7 +27,14 @@ if ($ultima) {
 }
 ?>
 
-<h2 class="page-title mb-4"><i class="fa-solid fa-table-columns me-2"></i>Panel de planillas</h2>
+<section class="page-heading module-page-heading mb-4">
+    <div>
+        <span class="page-eyebrow">Personas y remuneraciones</span>
+        <h1 class="page-title mb-1">Panel de planillas</h1>
+        <p class="page-subtitle mb-0">Controla colaboradores, asistencia y obligaciones laborales.</p>
+    </div>
+    <a href="index.php?vista=planillas" class="btn btn-primary"><i class="fa-solid fa-money-check-dollar me-1"></i>Gestionar planillas</a>
+</section>
 
 <div class="row g-3 mb-4">
     <div class="col-md-3">

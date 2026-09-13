@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/helpers.php';
+header('Content-Type: text/html; charset=UTF-8');
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -34,9 +35,11 @@ $nav = [
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link href="css/estilos.css" rel="stylesheet">
+    <link href="../public/css/design-system.css" rel="stylesheet">
+    <script src="../public/js/theme.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 </head>
-<body>
+<body class="module-app module-app--planilla">
 <?php if (empty($_GET['sin_shell'])): ?>
 <div class="app-shell">
     <aside class="app-sidebar">
@@ -56,10 +59,14 @@ $nav = [
                 <span class="app-user-name">Sistema de planilla</span>
                 <span class="app-user-rol">Independiente</span>
             </div>
-            <a href="../" class="app-logout" title="Volver al ERP"><i class="fa-solid fa-arrow-left"></i></a>
+            <a href="../public/index.php?ruta=dashboard" class="app-logout" title="Volver al panel general"><i class="fa-solid fa-arrow-left"></i></a>
         </div>
     </aside>
-    <main class="app-main">
+    <main class="app-main module-main">
+        <header class="module-contextbar">
+            <div><span class="module-contextbar__eyebrow">Ecosistema Aura</span><strong>Planillas y RR. HH.</strong></div>
+            <div class="module-contextbar__actions"><button type="button" class="portal-theme-toggle" data-theme-toggle aria-label="Activar modo oscuro"><i class="fa-solid fa-moon"></i></button><a href="../public/index.php?ruta=dashboard" class="btn btn-sm btn-outline-secondary"><i class="fa-solid fa-arrow-up-right-from-square me-1"></i>Panel general</a></div>
+        </header>
 <?php endif; ?>
 <?php if (!empty($message)): ?>
     <div class="alert alert-<?= $message['tipo'] === 'error' ? 'danger' : $message['tipo'] ?> alert-dismissible fade show mb-3" role="alert">

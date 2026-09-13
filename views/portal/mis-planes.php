@@ -5,9 +5,13 @@ $misPlanes = $misPlanes ?? [];
 $porEstado = $porEstado ?? [];
 ?>
 
-<div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="page-title mb-0"><i class="fa-solid fa-layer-group me-2"></i>Mis sistemas contratados</h2>
+<div class="container portal-container py-4 py-lg-5">
+    <div class="page-heading mb-4">
+        <div>
+            <span class="page-eyebrow">Suscripciones</span>
+            <h1 class="page-title mb-1">Mis sistemas contratados</h1>
+            <p class="page-subtitle mb-0">Licencias, vigencias e incidencias de tus soluciones Aura.</p>
+        </div>
         <a href="index.php?ruta=portal-mis-tickets" class="btn btn-sm btn-outline-secondary">
             <i class="fa-solid fa-ticket me-1"></i>Mis incidencias
         </a>
@@ -51,15 +55,28 @@ $porEstado = $porEstado ?? [];
         </div>
     </div>
 
-    <div class="row g-3">
-        <?php foreach ($misPlanes as $p): ?>
+    <section class="systems-launcher" aria-labelledby="systems-launcher-title">
+        <div class="section-heading mb-3">
+            <div>
+                <span class="section-kicker">Centro de aplicaciones</span>
+                <h2 class="section-title" id="systems-launcher-title">Ingresa a tus sistemas</h2>
+                <p class="page-subtitle mb-0">Selecciona una solución activa para comenzar a trabajar.</p>
+            </div>
+        </div>
+
+        <div class="row g-3">
+        <?php foreach ($misPlanes as $indice => $p):
+            $accesoSistema = urlSistemaPortal($p['plan_slug']);
+            $puedeIngresar = $p['estado'] === 'activo' && $accesoSistema !== null;
+        ?>
             <div class="col-md-6 col-xl-4">
-                <div class="card h-100">
+                <article class="card h-100 portal-system-card portal-system-card--<?= limpiar($p['plan_slug']) ?>">
                     <div class="card-body p-4 d-flex flex-column">
                         <div class="d-flex align-items-start justify-content-between mb-2">
                             <div class="d-flex align-items-center gap-3">
                                 <span class="app-logo"><i class="fa-solid <?= limpiar($p['icono']) ?>"></i></span>
                                 <div>
+                                    <span class="portal-system-card__order"><?= str_pad((string) ($indice + 1), 2, '0', STR_PAD_LEFT) ?></span>
                                     <h5 class="mb-0 fw-semibold"><?= limpiar($p['plan_nombre']) ?></h5>
                                     <small class="text-muted"><?= (int) $p['plan_modulos'] ?> módulos incluidos</small>
                                 </div>
@@ -93,13 +110,22 @@ $porEstado = $porEstado ?? [];
                             <span><?= (int) $p['tickets'] ?> incidencias en este sistema</span>
                         </div>
 
-                        <div class="mt-auto">
-                            <a href="index.php?ruta=portal-plan&id=<?= (int) $p['id'] ?>" class="btn btn-outline-primary w-100">
-                                <i class="fa-solid fa-eye me-1"></i>Ver detalle y mis incidencias
+                        <div class="mt-auto d-grid gap-2">
+                            <?php if ($puedeIngresar): ?>
+                                <a href="<?= limpiar($accesoSistema) ?>" class="btn btn-primary portal-system-card__launch">
+                                    <i class="fa-solid fa-arrow-up-right-from-square me-1"></i>Abrir sistema
+                                </a>
+                            <?php else: ?>
+                                <button type="button" class="btn btn-secondary" disabled>
+                                    <i class="fa-solid fa-lock me-1"></i>Sistema no disponible
+                                </button>
+                            <?php endif; ?>
+                            <a href="index.php?ruta=portal-plan&id=<?= (int) $p['id'] ?>" class="btn btn-link btn-sm portal-system-card__detail">
+                                Ver detalle e incidencias
                             </a>
                         </div>
                     </div>
-                </div>
+                </article>
             </div>
         <?php endforeach; ?>
 
@@ -114,7 +140,8 @@ $porEstado = $porEstado ?? [];
                 </div>
             </div>
         <?php endif; ?>
-    </div>
+        </div>
+    </section>
 </div>
 
 <?php

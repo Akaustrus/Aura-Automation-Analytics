@@ -13,15 +13,18 @@
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
-$host = getenv('DB_HOST') ?: 'localhost';
-$user = getenv('DB_USER') ?: 'root';
-$pass = getenv('DB_PASS') ?: '1234';
-$base = getenv('DB_NAME') ?: 'medio';
+$host = getenv('MEDIO_DB_HOST') ?: getenv('DB_HOST') ?: 'localhost';
+$port = getenv('MEDIO_DB_PORT') ?: getenv('DB_PORT') ?: '3307';
+$user = getenv('MEDIO_DB_USER') ?: getenv('DB_USER') ?: 'root';
+$passEnv = getenv('MEDIO_DB_PASS');
+$passEnv = $passEnv !== false ? $passEnv : getenv('DB_PASS');
+$pass = $passEnv !== false ? $passEnv : '';
+$base = getenv('MEDIO_DB_NAME') ?: 'medio';
 
 $resultado = ['ok' => false, 'mensajes' => [], 'base' => $base];
 
 try {
-    $pdo = new PDO("mysql:host=$host;charset=utf8mb4", $user, $pass, [
+    $pdo = new PDO("mysql:host=$host;port=$port;charset=utf8mb4", $user, $pass, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     ]);
 

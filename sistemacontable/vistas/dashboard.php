@@ -20,7 +20,14 @@ $montoMes = array_fill(1,12,0);
 foreach ($porMes as $m) { $montoMes[(int)$m['mes']] += (float)$m['monto']; }
 ?>
 
-<h2 class="page-title mb-4"><i class="fa-solid fa-table-columns me-2"></i>Panel contable</h2>
+<section class="page-heading module-page-heading mb-4">
+    <div>
+        <span class="page-eyebrow">Resumen financiero</span>
+        <h1 class="page-title mb-1">Panel contable</h1>
+        <p class="page-subtitle mb-0">Documentos, impuestos y movimientos contables en un solo lugar.</p>
+    </div>
+    <a href="index.php?vista=documentos" class="btn btn-primary"><i class="fa-solid fa-file-circle-plus me-1"></i>Gestionar documentos</a>
+</section>
 
 <!-- KPIs -->
 <div class="row g-3 mb-4">

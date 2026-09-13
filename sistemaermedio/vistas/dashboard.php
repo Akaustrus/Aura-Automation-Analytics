@@ -38,7 +38,14 @@ foreach ($db->query("SELECT cl.razon_social, SUM(v.total) t FROM ventas v JOIN c
 }
 ?>
 
-<h2 class="page-title mb-4"><i class="fa-solid fa-table-columns me-2"></i>Panel de control</h2>
+<section class="page-heading module-page-heading mb-4">
+    <div>
+        <span class="page-eyebrow">Visión ejecutiva</span>
+        <h1 class="page-title mb-1">Panel de control</h1>
+        <p class="page-subtitle mb-0">Ventas, liquidez, obligaciones y alertas de inventario.</p>
+    </div>
+    <a href="index.php?vista=ventas" class="btn btn-primary"><i class="fa-solid fa-cart-plus me-1"></i>Gestionar ventas</a>
+</section>
 
 <div class="row g-3 mb-4">
     <?php

@@ -32,7 +32,14 @@ $porCliente = $db->query("SELECT cl.razon_social, COALESCE(SUM(v.total),0) total
 $auditoria = $db->query('SELECT * FROM audit_log ORDER BY id DESC LIMIT 6')->fetchAll();
 ?>
 
-<h2 class="page-title mb-4"><i class="fa-solid fa-cubes me-2"></i>Panel del ERP — <?= limpiar(nombreEmpresa($db)) ?></h2>
+<section class="page-heading module-page-heading mb-4">
+    <div>
+        <span class="page-eyebrow">Operación comercial</span>
+        <h1 class="page-title mb-1">Panel del ERP</h1>
+        <p class="page-subtitle mb-0"><?= limpiar(nombreEmpresa($db)) ?> · ventas, compras e inventario.</p>
+    </div>
+    <a href="index.php?vista=ventas" class="btn btn-primary"><i class="fa-solid fa-cart-plus me-1"></i>Gestionar ventas</a>
+</section>
 
 <div class="row g-3 mb-4">
     <div class="col-md-3">
