@@ -25,7 +25,11 @@ if (empty($_SESSION['tareas_usuario'])) {
 
 header('Cache-Control: no-store');
 
-$db   = TareasDB::conexion();
+try {
+    $db = TareasDB::conexion();
+} catch (Throwable $e) {
+    responderJson(false, $e->getMessage(), null, 500);
+}
 $accion = $_GET['accion'] ?? $_POST['action'] ?? '';
 
 switch ($accion) {

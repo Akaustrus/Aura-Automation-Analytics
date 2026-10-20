@@ -18,60 +18,117 @@ class TareasDB
     }
 
     /* ------------------------------------------------------------------ */
-    /*  Conexión: caché + auto-detección (una sola vez, después es gratis) */
+    /*  Configuración: entorno.php > variables de entorno > auto-detección */
     /* ------------------------------------------------------------------ */
 
-    private static function conectar(): PDO
+    /** Lee config/entorno.php (si existe) y lo combina con variables de entorno. */
+    private static function config(): array
     {
-        $host    = getenv('TAREAS_DB_HOST') ?: '127.0.0.1';
-        $usuario = getenv('TAREAS_DB_USER') ?: 'root';
+        $cfg = [
+            'host'    => null,
+            'puerto'  => null,
+            'usuario' => null,
+            'clave'   => null,
+            'base'    => null,
+        ];
 
-        // Configuración explícita por variables de entorno TAREAS_DB_*:
-        // se usa directamente, sin auto-detección.
-        $claveEnv = getenv('TAREAS_DB_PASS');
-        if ($claveEnv !== false) {
-            $puerto = getenv('TAREAS_DB_PORT') ?: '3306';
-            $pdo = self::intentar($host, $puerto, $usuario, $claveEnv);
-            if ($pdo) {
-                return $pdo;
-            }
-            self::fallar($host, $usuario, 'las variables de entorno TAREAS_DB_* no son válidas');
-        }
-
-        // 1) Parámetros guardados de la última conexión exitosa (más rápido).
-        $cache = self::leerCache();
-        if ($cache !== null) {
-            $pdo = self::intentar($host, $cache['puerto'], $usuario, $cache['clave']);
-            if ($pdo) {
-                return $pdo;
-            }
-        }
-
-        // 2) Auto-detección: puertos y contraseñas más comunes.
-        foreach (['3306', '3307'] as $puerto) {
-            foreach (['', '1234'] as $clave) {
-                $pdo = self::intentar($host, $puerto, $usuario, $clave);
-                if ($pdo) {
-                    self::escribirCache(['puerto' => $puerto, 'clave' => $clave]);
-                    return $pdo;
+        $archivo = __DIR__ . '/entorno.php';
+        if (is_file($archivo)) {
+            $datos = @include $archivo;
+            if (is_array($datos)) {
+                foreach ($cfg as $clave => $valor) {
+                    if (array_key_exists($clave, $datos) && $datos[$clave] !== null && $datos[$clave] !== '') {
+                        $cfg[$clave] = $datos[$clave];
+                    }
                 }
             }
         }
 
-        self::fallar($host, $usuario, 'no se encontró MySQL en los puertos 3306/3307');
+        // Variables de entorno (si el archivo no fijó el valor).
+        if ($cfg['host'] === null)    $cfg['host']    = getenv('TAREAS_DB_HOST') ?: getenv('DB_HOST') ?: null;
+        if ($cfg['puerto'] === null)  $cfg['puerto']  = getenv('TAREAS_DB_PORT') ?: getenv('DB_PORT') ?: null;
+        if ($cfg['usuario'] === null) $cfg['usuario'] = getenv('TAREAS_DB_USER') ?: getenv('DB_USER') ?: null;
+        if ($cfg['clave'] === null)   $cfg['clave']   = getenv('TAREAS_DB_PASS') !== false ? getenv('TAREAS_DB_PASS') : (getenv('DB_PASS') !== false ? getenv('DB_PASS') : null);
+        if ($cfg['base'] === null)    $cfg['base']    = getenv('TAREAS_DB_NAME') ?: 'tareas';
+
+        return $cfg;
     }
 
-    private static function intentar(string $host, string $puerto, string $usuario, string $clave): ?PDO
+    /* ------------------------------------------------------------------ */
+    /*  Conexión: config manual > caché > auto-detección                   */
+    /* ------------------------------------------------------------------ */
+
+    private static function conectar(): PDO
     {
+        $cfg = self::config();
+
+        // 1) Si el usuario fijó host/usuario en entorno.php, se respeta al pie de la letra.
+        if ($cfg['host'] !== null) {
+            $claves = $cfg['clave'] !== null ? [(string) $cfg['clave']] : ['', '1234'];
+            foreach ($claves as $clave) {
+                $pdo = self::intentar($cfg['host'], $cfg['puerto'], (string) $cfg['usuario'], $clave);
+                if ($pdo) {
+                    self::escribirCache(['host' => $cfg['host'], 'puerto' => $cfg['puerto'], 'usuario' => $cfg['usuario'], 'clave' => $clave]);
+                    return $pdo;
+                }
+            }
+            self::fallar($cfg);
+        }
+
+        // 2) Parámetros guardados de la última conexión exitosa (lo más rápido).
+        $cache = self::leerCache();
+        if ($cache !== null) {
+            $pdo = self::intentar($cache['host'], $cache['puerto'], $cache['usuario'], $cache['clave']);
+            if ($pdo) {
+                return $pdo;
+            }
+        }
+
+        // 3) Auto-detección: socket local, luego TCP, puertos y claves típicas.
+        //    'localhost' en PDO usa el socket de MySQL/MariaDB (como en Raspberry Pi).
+        $intentos = [
+            ['host' => 'localhost', 'puerto' => null, 'usuario' => 'root', 'clave' => ''],
+            ['host' => 'localhost', 'puerto' => null, 'usuario' => 'root', 'clave' => '1234'],
+            ['host' => '127.0.0.1', 'puerto' => '3306', 'usuario' => 'root', 'clave' => ''],
+            ['host' => '127.0.0.1', 'puerto' => '3306', 'usuario' => 'root', 'clave' => '1234'],
+            ['host' => '127.0.0.1', 'puerto' => '3307', 'usuario' => 'root', 'clave' => ''],
+            ['host' => '127.0.0.1', 'puerto' => '3307', 'usuario' => 'root', 'clave' => '1234'],
+        ];
+
+        foreach ($intentos as $intento) {
+            $pdo = self::intentar($intento['host'], $intento['puerto'], $intento['usuario'], $intento['clave']);
+            if ($pdo) {
+                self::escribirCache($intento);
+                return $pdo;
+            }
+        }
+
+        self::fallar($cfg);
+    }
+
+    /**
+     * Intenta una conexión. Con host 'localhost' se usa el socket de MySQL/MariaDB
+     * (sin puerto); con IP se usa TCP con timeout corto.
+     */
+    private static function intentar(?string $host, ?string $puerto, string $usuario, string $clave): ?PDO
+    {
+        $host = $host ?: '127.0.0.1';
+
+        $dsn = 'mysql:host=' . $host;
+        if ($host !== 'localhost' && $puerto) {
+            $dsn .= ';port=' . $puerto;
+        }
+        $dsn .= ';charset=utf8mb4';
+
         try {
             return new PDO(
-                "mysql:host=$host;port=$puerto;charset=utf8mb4",
+                $dsn,
                 $usuario,
                 $clave,
                 [
                     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                    PDO::ATTR_TIMEOUT            => 3,   // corto: si no responde, probamos la siguiente opción
+                    PDO::ATTR_TIMEOUT            => 3,
                 ]
             );
         } catch (PDOException $e) {
@@ -79,12 +136,34 @@ class TareasDB
         }
     }
 
-    private static function fallar(string $host, string $usuario, string $motivo): void
+    private static function fallar(array $cfg): never
     {
-        die('No se pudo conectar a MySQL en ' . htmlspecialchars($host)
-            . ' (usuario "' . htmlspecialchars($usuario) . '"): ' . htmlspecialchars($motivo) . '.
-            Verifica que tu servidor MySQL esté en ejecución (XAMPP / WAMP / MySQL).');
+        $host    = $cfg['host'] ?: '127.0.0.1 / localhost';
+        $usuario = $cfg['usuario'] ?: 'root';
+        $base    = $cfg['base'] ?: 'tareas';
+
+        $mensaje = "No se pudo conectar a MySQL/MariaDB (host: {$host}, usuario: \"{$usuario}\", base: \"{$base}\").\n\n"
+            . "Qué revisar:\n"
+            . "1) ¿El servicio está corriendo? En Raspberry Pi / Linux:\n"
+            . "     sudo systemctl status mariadb   (o mysql)\n"
+            . "     sudo systemctl start mariadb\n"
+            . "2) Si usas MariaDB con autenticación por socket, prueba en config/entorno.php:\n"
+            . "     'host' => 'localhost'  y un usuario propio (no root).\n"
+            . "3) Crea un usuario dedicado desde la terminal:\n"
+            . "     sudo mysql\n"
+            . "     CREATE USER 'aura'@'localhost' IDENTIFIED BY 'tu_clave';\n"
+            . "     GRANT ALL PRIVILEGES ON {$base}.* TO 'aura'@'localhost'; FLUSH PRIVILEGES;\n"
+            . "     y ponlo en config/entorno.php (host/usuario/clave).\n"
+            . "4) Si MySQL corre en otra máquina de la red local, usa su IP en 'host'.\n"
+            . "5) Si lo fijaste todo en config/entorno.php, revisa que los datos sean correctos.";
+
+        error_log('Error de BD (tareas): ' . $mensaje);
+        throw new RuntimeException($mensaje);
     }
+
+    /* ------------------------------------------------------------------ */
+    /*  Caché de la conexión que ya funcionó                               */
+    /* ------------------------------------------------------------------ */
 
     private static function leerCache(): ?array
     {
@@ -92,11 +171,19 @@ class TareasDB
             return null;
         }
         $datos = @include self::CACHE;
-        return is_array($datos) && isset($datos['puerto']) ? $datos : null;
+        return is_array($datos) && isset($datos['host'], $datos['puerto'], $datos['usuario'], $datos['clave'])
+            ? $datos
+            : null;
     }
 
     private static function escribirCache(array $datos): void
     {
+        $datos = [
+            'host'    => $datos['host'] ?? null,
+            'puerto'  => $datos['puerto'] ?? null,
+            'usuario' => $datos['usuario'] ?? null,
+            'clave'   => $datos['clave'] ?? null,
+        ];
         @file_put_contents(
             self::CACHE,
             "<?php\n// Autogenerado: parámetros de conexión que funcionaron. No editar.\nreturn "
@@ -111,7 +198,8 @@ class TareasDB
 
     private static function asegurarEsquema(PDO $db): void
     {
-        $base = getenv('TAREAS_DB_NAME') ?: 'tareas';
+        $base = self::config()['base'] ?: 'tareas';
+        $base = preg_replace('/[^A-Za-z0-9_]/', '', $base) ?: 'tareas';
 
         // Si la base ya existe, solo la selecciona (sin ejecutar DDL en cada petición).
         try {
