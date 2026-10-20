@@ -19,8 +19,13 @@ Aura-Automation-Analytics/
 ├── sistemafacturacion/     Facturación
 ├── sistemaplanilla/        Recursos humanos y planillas
 ├── sistemaerp/             ERP para microempresa
-└── sistemaermedio/         ERP para mediana empresa
+├── sistemaermedio/         ERP para mediana empresa
+└── sistemasap/             Sistema de Análisis Predictivo (modelo beta)
 ```
+
+> **Estado:** `sistemasap/` es el prototipo (beta) del futuro ERP integrado. Los 6 módulos
+> existentes se conservan sin cambios; el nuevo ERP se construirá siguiendo la especificación
+> completa guardada en `docs/ERP_REQUERIMIENTOS.md`.
 
 ## Responsabilidades por capa
 
@@ -87,4 +92,5 @@ php -S localhost:8000 -t .
 - Planilla: `http://localhost:8000/sistemaplanilla/index.php`
 - ERP MYPE: `http://localhost:8000/sistemaerp/index.php`
 - ERP mediana empresa: `http://localhost:8000/sistemaermedio/index.php`
+- SAP (beta): `http://localhost:8000/sistemasap/index.php`
 

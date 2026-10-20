@@ -1,0 +1,466 @@
+:root {
+    --teal: #0d9488;
+    --teal-dark: #0f766e;
+    --teal-light: #99f6e4;
+    --bg: #f0fdfa;
+    --ink: #134e4a;
+    --muted: #64748b;
+    --card: #ffffff;
+    --sidebar: #134e4a;
+}
+
+* {
+    font-family: 'Poppins', system-ui, sans-serif;
+}
+
+body {
+    background: var(--bg);
+    color: var(--ink);
+    margin: 0;
+}
+
+/* ---- Layout ---- */
+.app-shell {
+    display: flex;
+    min-height: 100vh;
+}
+
+.app-sidebar {
+    width: 230px;
+    flex-shrink: 0;
+    background: var(--sidebar);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    padding: 1.2rem 1rem;
+}
+
+.app-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 700;
+    font-size: 1.2rem;
+    padding-bottom: 1.3rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 1.2rem;
+}
+
+.app-logo {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: var(--teal);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.app-nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.app-link {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    padding: 0.6rem 0.8rem;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: background 0.15s ease;
+}
+
+.app-link i { width: 20px; text-align: center; }
+
+.app-link:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.app-link.active {
+    color: #fff;
+    background: var(--teal);
+}
+
+.app-user {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.app-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--teal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.app-user-name { display: block; font-size: 0.85rem; font-weight: 600; }
+.app-user-rol { font-size: 0.75rem; color: rgba(255, 255, 255, 0.6); }
+.app-logout { margin-left: auto; color: rgba(255, 255, 255, 0.7); }
+.app-logout:hover { color: #fff; }
+
+.app-main {
+    flex: 1;
+    padding: 2rem;
+    min-width: 0;
+}
+
+/* ---- Títulos ---- */
+.page-title {
+    font-weight: 700;
+    color: var(--ink);
+}
+
+.page-title i { color: var(--teal); }
+
+/* ---- Barra superior de la vista ---- */
+.toolbar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.toolbar-sub {
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+/* ---- Stats ---- */
+.stat {
+    border-radius: 14px;
+    color: #fff;
+    padding: 1.4rem;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.stat-icon { font-size: 1.3rem; margin-bottom: 0.6rem; }
+.stat-num { font-size: 1.8rem; font-weight: 700; line-height: 1.1; }
+.stat-label { font-size: 0.8rem; opacity: 0.9; }
+
+.stat-1 { background: #0d9488; }
+.stat-2 { background: #0f766e; }
+.stat-3 { background: #14b8a6; }
+.stat-4 { background: #64748b; }
+.stat-5 { background: #0ea5e9; }
+.stat-6 { background: #ef4444; }
+
+/* ---- Card ---- */
+.card {
+    border: none;
+    border-radius: 14px;
+    box-shadow: 0 1px 8px rgba(13, 148, 136, 0.07);
+}
+
+.card-header {
+    background: #fff;
+    border-bottom: 1px solid #f1f5f9;
+    color: var(--ink);
+    border-radius: 14px 14px 0 0 !important;
+    font-weight: 600;
+}
+
+/* ---- Botón primario ---- */
+.btn-primary {
+    background: var(--teal);
+    border-color: var(--teal);
+    font-weight: 500;
+    border-radius: 10px;
+}
+
+.btn-primary:hover { background: var(--teal-dark); border-color: var(--teal-dark); }
+
+/* ---- Filtros ---- */
+.filtros { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+.filtro-btn {
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--muted);
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.filtro-btn:hover { color: var(--teal); border-color: var(--teal); }
+
+.filtro-btn.active {
+    color: #fff;
+    background: var(--teal);
+    border-color: var(--teal);
+}
+
+.filtro-select {
+    width: auto;
+    min-width: 150px;
+    border-radius: 10px;
+    border-color: #e2e8f0;
+    font-size: 0.82rem;
+}
+
+/* ================================================== */
+/*  Lista de tareas (AJAX)                            */
+/* ================================================== */
+.tarea-lista {
+    display: flex;
+    flex-direction: column;
+}
+
+.tarea-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    padding: 1rem 1.4rem;
+    border-bottom: 1px solid #f1f5f9;
+    transition: background 0.15s ease, opacity 0.25s ease, transform 0.25s ease;
+    animation: tarea-in 0.25s ease;
+}
+
+@keyframes tarea-in {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.tarea-item:last-child { border-bottom: 0; }
+.tarea-item:hover { background: #f8fffe; }
+
+.tarea-item.eliminando {
+    opacity: 0;
+    transform: translateX(24px);
+}
+
+.tarea-check {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--teal);
+    background: #fff;
+    color: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: all 0.15s ease;
+}
+
+.tarea-check:hover { background: var(--teal-light); }
+
+.tarea-check.checked {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: #fff;
+}
+
+.tarea-cuerpo { flex: 1; min-width: 0; }
+
+.tarea-titulo {
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0;
+    word-break: break-word;
+}
+
+.tarea-item.completada .tarea-titulo {
+    text-decoration: line-through;
+    color: var(--muted);
+}
+
+.tarea-desc {
+    font-size: 0.84rem;
+    color: var(--muted);
+    margin: 0.15rem 0 0;
+    word-break: break-word;
+}
+
+.tarea-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+.tarea-acciones {
+    display: flex;
+    gap: 0.3rem;
+    flex-shrink: 0;
+}
+
+/* ---- Badges de prioridad ---- */
+.prioridad {
+    padding: 0.2rem 0.65rem;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.prioridad-critica { background: #fee2e2; color: #dc2626; }
+.prioridad-alta   { background: #fef3c7; color: #d97706; }
+.prioridad-media  { background: #e0f2fe; color: #0284c7; }
+.prioridad-baja   { background: #dcfce7; color: #16a34a; }
+
+/* ---- Badges de estado ---- */
+.estado {
+    padding: 0.2rem 0.65rem;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.estado-pendiente  { background: #f1f5f9; color: #475569; }
+.estado-en_proceso { background: #ccfbf1; color: #0f766e; }
+.estado-completada { background: #dcfce7; color: #16a34a; }
+
+.tarea-vencimiento.vencida { color: #dc2626; font-weight: 600; }
+
+/* ---- Vacío ---- */
+.tarea-vacio {
+    padding: 3.5rem 1rem;
+    text-align: center;
+    color: var(--muted);
+}
+
+.tarea-vacio i { opacity: 0.3; display: block; margin-bottom: 0.8rem; }
+.tarea-vacio p { margin: 0; }
+
+/* ---- Toast (notificación flotante AJAX) ---- */
+.toast-aura {
+    position: fixed;
+    right: 1.4rem;
+    bottom: 1.4rem;
+    z-index: 1090;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.85rem 1.2rem;
+    border-radius: 12px;
+    background: var(--sidebar);
+    color: #fff;
+    font-size: 0.88rem;
+    font-weight: 500;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.toast-aura.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast-aura.toast-exito i { color: #4ade80; }
+.toast-aura.toast-error  { background: #7f1d1d; }
+.toast-aura.toast-error i { color: #fca5a5; }
+
+/* ---- Modal (respaldo si no carga el CSS de Bootstrap) ---- */
+.modal {
+    display: none;
+}
+
+.modal.show {
+    display: block;
+}
+
+/* ---- Chip de responsable (avatar + nombre) ---- */
+.respon-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.2rem 0.65rem 0.2rem 0.25rem;
+    border-radius: 20px;
+    background: #f0fdfa;
+    border: 1px solid var(--teal-light);
+    color: var(--teal-dark);
+    font-size: 0.72rem;
+    font-weight: 600;
+    max-width: 220px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.respon-chip--nadie {
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+    color: var(--muted);
+}
+
+.respon-avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--teal);
+    color: #fff;
+    font-size: 0.62rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    letter-spacing: 0.02em;
+}
+
+.respon-avatar--nadie { background: #cbd5e1; color: #64748b; }
+
+.respon-avatar--grande {
+    width: 42px;
+    height: 42px;
+    font-size: 0.95rem;
+    margin-top: 2px;
+}
+
+/* ---- Gráficos Chart.js ---- */
+.chart-box {
+    position: relative;
+    width: 100%;
+    height: 260px;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+    .app-shell { flex-direction: column; }
+
+    .app-sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
+        padding: 0.8rem 1rem;
+    }
+
+    .app-brand { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
+    .app-nav { flex-direction: row; flex-wrap: wrap; margin-left: 1rem; }
+    .app-user { display: none; }
+    .app-main { padding: 1rem; }
+    .toolbar { flex-direction: column; }
+    .tarea-acciones { flex-direction: column; }
+}

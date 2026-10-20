@@ -111,6 +111,7 @@ function urlSistemaPortal(string $slug): ?string
         'planilla' => '../sistemaplanilla/index.php',
         'erp-basico' => '../sistemaerp/index.php',
         'erp-mediana' => '../sistemaermedio/index.php',
+        'sap' => '../sistemasap/index.php',
     ];
 
     return $rutas[$slug] ?? null;

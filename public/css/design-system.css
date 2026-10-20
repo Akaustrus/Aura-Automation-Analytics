@@ -788,10 +788,11 @@ html[data-theme="dark"] .portal-system-card:hover { box-shadow: 0 14px 30px rgba
 .module-app canvas { max-width: 100%; }
 
 .module-app--contabilidad { --module-accent: #0f766e; }
-.module-app--facturacion { --module-accent: #0369a1; }
-.module-app--planilla { --module-accent: #7c3aed; }
-.module-app--erp { --module-accent: #b45309; }
+.module-app--facturacion { --module-accent: #0369a1; } 
+.module-app--planilla { --module-accent: #7c3aed; }    
+.module-app--erp { --module-accent: #b45309; }         
 .module-app--medio { --module-accent: #0f766e; }
+.module-app--sap { --module-accent: #0f766e; }
 .module-app .app-logo { background: var(--module-accent); }
 .module-app .btn-primary { background: var(--module-accent); border-color: var(--module-accent); }
 
